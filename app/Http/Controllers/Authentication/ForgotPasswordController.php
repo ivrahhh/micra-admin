@@ -18,12 +18,12 @@ class ForgotPasswordController extends Controller
             credentials: $email,
         );
 
-        if($status === Password::RESET_LINK_SENT) {
-            return back()->with(['success' => 'reset-link-sent']);
+        if($status !== Password::RESET_LINK_SENT) {
+            throw ValidationException::withMessages([
+                'email' => __($status),
+            ]);
         }
-
-        throw ValidationException::withMessages([
-            'email' => __($status),
-        ]);
+        
+        return back()->with(['success' => 'reset-link-sent']);
     }
 }
