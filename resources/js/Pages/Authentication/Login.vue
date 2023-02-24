@@ -2,9 +2,13 @@
 import FormLabel from '@/Components/FormLabel.vue';
 import Submit from '@/Components/Submit.vue';
 import TextBox from '@/Components/TextBox.vue';
+import Toast from '@/Components/Toast.vue';
 import Authentication from '@/Layouts/Authentication.vue';
+import { useToastStore } from '@/Stores/toast';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import { onMounted } from 'vue';
 
+const store = useToastStore()
 const form = useForm({
     email: null,
     password: null,
@@ -17,6 +21,12 @@ const authenticate = () => {
         preserveScroll: true,
     })
 }
+
+onMounted(() => {
+    if(store.getSuccessNotification === 'password-reset') {
+        store.openToast()
+    }
+})
 </script>
 
 <template>
@@ -52,4 +62,19 @@ const authenticate = () => {
             </form>
         </div>
     </Authentication>
+    <Transition
+        enter-active-class="transition ease-out duration-200"
+        enter-from-class="translate-x-full opacity-0"
+        enter-to-class="translate-x-0 opacity-100"
+        leave-active-class="transition ease-in duration-200"
+        leave-from-class="scale-100 opacity-100"
+        leave-to-class="scale-90 opacity-0"
+    >
+        <Toast 
+            title="Password Reset"
+            message="Your password has been reset."
+            v-if="store.active"
+            @close="store.closeToast()"
+        />
+    </Transition>
 </template>

@@ -26,7 +26,7 @@ const resetPassword = () => {
 
 <template>
     <Head 
-        title="Log in"
+        title="Reset Password"
     />
 
     <Authentication>
