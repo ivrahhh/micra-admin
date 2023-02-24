@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Authentication;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Authentication\ResetPasswordRequest;
-use App\Models\User;
+use App\Models\Admin;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -29,15 +29,15 @@ class ResetPasswordController extends Controller
     {
         $status = Password::reset(
             credentials: $request->validated(),
-            callback: function (User $user, string $password) {
-                $user->forceFill([
+            callback: function (Admin $admin, string $password) {
+                $admin->forceFill([
                     'password' => Hash::make($password),
                     'remember_token' => Str::random(60),
                 ]);
 
-                $user->save();
+                $admin->save();
 
-                event(new PasswordReset($user));
+                event(new PasswordReset($admin));
             }
         );
 

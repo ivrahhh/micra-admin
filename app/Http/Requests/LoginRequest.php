@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Models\User;
+use App\Models\Admin;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
@@ -34,7 +34,7 @@ class LoginRequest extends FormRequest
     }
 
     /**
-     * Attempt to authenticate the user.
+     * Attempt to authenticate the admin.
      * 
      * @throws \Illuminate\Validation\ValidationException
      */
@@ -54,15 +54,15 @@ class LoginRequest extends FormRequest
     }
 
     /**
-     * Check if the user can be authenticated.
+     * Check if the admin can be authenticated.
      * 
      * @throws \Illuminate\Validation\ValidationException
      */
     public function attempt() : bool
     {
-        $user = User::query()->where('email', $this->input('email'))->first(['id','email']);
+        $admin = Admin::query()->where('email', $this->input('email'))->first(['id','email']);
 
-        if(is_null($user)) {
+        if(is_null($admin)) {
             throw ValidationException::withMessages([
                 'email' => trans('auth.failed'),
             ]);
